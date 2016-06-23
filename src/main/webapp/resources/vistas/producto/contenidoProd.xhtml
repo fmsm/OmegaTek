@@ -1,0 +1,152 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+                            
+        <div class="ui-grid-row">
+                                    
+            <!-- IMAGEN/ES DEL PRODUCTO -->                
+            <p:panel styleClass="ui-grid-col-6">
+                
+                <p:galleria value="#{productoViewMB.prod.imagenes}" var="img" autoPlay="false" 
+                            style="border: none;">
+                    <p:graphicImage library="imagenes/productos" name="#{img.imagen}" 
+                                    style="height: 100%;"/>
+                </p:galleria>
+                
+            </p:panel>
+                        
+            <!-- INFO/PRECIO/DESCRIPCION DEL PRODUCTO -->            
+            <p:panel styleClass="ui-grid-col-6">
+                
+                <h:form id="prodForm">
+                    
+                    <!-- NOMBRE Y P:RATING DEL PRODUCTO -->
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            
+                            <div style="display:flex; justify-content: space-between; align-items: center;">
+                                <h:outputText value="#{productoViewMB.prod.denominacion}"
+                                              style="font-weight:bold; font-size: 1.5em;"/>
+
+                                <i class="fa fa-star-o fa-lg" style="margin-left: 2em;"></i>
+                            </div>
+                            
+                            <p:rating readonly="true" value="#{productoViewMB.prod.rating}"/>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- PRECIO Y SI ESTA EN STOCK/AGOTADO -->
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+
+                            <p:separator/>
+                            
+                            <div style="display:flex; align-items: center;">
+                                <h:outputFormat value="#{mensajes.precio}" 
+                                                styleClass="ui-grid-col-5" style="font-size: 2.5em; text-align: right;">
+                                    <f:param value="#{productoViewMB.prod.precioUnitario}"/>
+                                </h:outputFormat>
+                                
+                                <div class="ui-grid-col-2"></div>
+                                
+                                <h:outputText value="En Stock" rendered="#{productoViewMB.prod.stock gt 0}" 
+                                              styleClass="ui-grid-col-2" style="color: #4e9400;"/>
+                                <h:outputText value="Agotado" rendered="#{productoViewMB.prod.stock eq 0 and not productoViewMB.prod.prdDescat}"
+                                              styleClass="ui-grid-col-2" style="color: red;"/>
+                                <h:outputText value="Descatalogado" rendered="#{productoViewMB.prod.prdDescat}"
+                                              styleClass="ui-grid-col-2" style="color: red;"/>                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTON COMPRAR Y AÑADIR A FAVORITOS -->
+                    <div class="ui-grid-row">
+                            
+                        <p:commandButton id="buyBtn" value="Comprar" action="#{cestaMB.gestionPedidoCesta(productoViewMB.prod.idProducto)}" icon="fa fa-cart-plus" iconPos="right" ajax="false"
+                                         disabled="#{productoViewMB.prod.stock eq 0 or productoViewMB.prod.prdDescat}" styleClass="ui-grid-col-5"/>
+
+                         <div class="ui-grid-col-2"></div>
+
+                         <p:commandButton id="favBtn" value="Añadir a Favoritos" icon="fa fa-star" iconPos="right" onclick="toggleFav()"
+                                          styleClass="ui-grid-col-5"/>
+                            
+                            <script>
+                                
+                                function toggleFav() {
+                                     if ( $('i').hasClass("fa-star") ) {
+                                         $('i').removeClass("fa-star").addClass("fa-star-o");
+                                         $('#prodForm\\:favBtn>span').eq(0).removeClass("fa-star-o").addClass("fa-star");
+                                     } else {
+                                         $('i').removeClass("fa-star-o").addClass("fa-star");
+                                         $('#prodForm\\:favBtn>span').eq(0).removeClass("fa-star").addClass("fa-star-o")
+                                     }
+                                     
+                                     var texto = $('#prodForm\\:favBtn>span').eq(1).text();
+                                     texto = (texto === "Añadir a Favoritos") ? "Eliminar de Favoritos" : "Añadir a Favoritos";
+                                     $('#prodForm\\:favBtn>span').eq(1).text(texto);
+                                }
+                                
+                            </script>
+                    </div>                            
+
+                    <!-- DESCRIPCION -->
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            
+                            <p:separator/>
+                            <h:outputText value="Descripci&oacute;n" style="font-weight: bold; font-size: 1.5em; margin-bottom: 0.5em; display: inline-block;"/>
+                            <br/>
+                            <h:outputText value="#{productoViewMB.prod.descripcion}"/>
+                                                        
+                        </div>
+                    </div>
+                
+                </h:form>
+            </p:panel>
+            
+        </div>
+        
+        <p:separator/>
+
+            <!-- CARACTERISTICAS DEL PRODUCTO -->            
+            <p:panel id="carac" header="Caracter&iacute;sticas">
+                
+                <ui:repeat value="#{productoViewMB.prod.caracteristicas}" var="item">                            
+                    <div class="ui-grid-row" style="border-bottom: 1px solid #CDCDCD; margin-bottom: 0.3em;">
+
+                        <div class="ui-grid-col-3" >
+                                <p:outputLabel value="#{item.caracteristica.nombre}" />
+                        </div>
+
+                        <div class="ui-grid-col-9" >
+                                <p:outputLabel value="#{item.descripcion}" />
+                        </div>                        
+                        
+                    </div>                                        
+                </ui:repeat>                                                                        
+                
+            </p:panel>                
+            
+            <script>
+                /* pequeño efecto con los bordes que aparecene debajo de las caracteristicas */
+                $( document ).ready(function() {
+                    $('#carac .ui-grid-row').first().css('margin-top','0.3em').end().last().css({'border':'none','margin-bottom':'0'});
+
+                });    
+            </script>
+            
+    </ui:composition>
+</h:body>
+</html>

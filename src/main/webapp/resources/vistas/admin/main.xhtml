@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        
+        <p:growl id="growl" showDetail="true"/>
+        
+        <p:tabView id="tabs" orientation="top">
+            
+            <p:tab title="Clientes">
+                <h:form>
+                <p:dataTable id="tablaClientes" value="#{adminPnlViewMB.modelUsu}" var="itemUsu" rows="20" paginator="true" paginatorAlwaysVisible="false"
+                             resizableColumns="true" liveResize="true" reflow="true" lazy="true">
+                    
+                    <f:facet name="header">
+                        <p:commandButton id="elegirColsCli" value="Columnas" type="button" icon="ui-icon-calculator" style="float: right; margin-right: 1em;"/>
+                        <p:columnToggler datasource="tablaClientes" trigger="elegirColsCli"/>
+                        <div style="clear: both"/>
+                    </f:facet>
+                    
+                    <p:column headerText="ID">
+                        <h:outputText value="#{itemUsu.idUsuario}" />
+                    </p:column>                    
+                    
+                    <p:column headerText="Email">
+                        <h:outputText value="#{itemUsu.email}" />
+                    </p:column>
+
+                    <p:column headerText="Password">
+                        <h:outputText value="#{itemUsu.clave}" converter="byteArrayAString"/>
+                    </p:column>
+
+                    <p:column headerText="Ult. Acceso" class="derecha">
+                        <h:outputText value="#{itemUsu.ultimoAcceso}" >
+                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Tipo" class="centro">
+                        <h:outputText value="#{itemUsu.usrRole}" />
+                    </p:column>
+                                        
+                    <p:column headerText="Bloqu." class="centro">                        
+                        <p:selectBooleanCheckbox value="#{itemUsu.usrBloqueado}" disabled="#{itemUsu.usrRole eq 'Administrador'}" >
+                            <p:ajax update="growl" listener="#{adminPnlViewMB.toggleBloqueoUsr(itemUsu)}" />
+                        </p:selectBooleanCheckbox>                            
+                    </p:column>                           
+                    
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{itemUsu.clienteUsuario.nombre}" />
+                    </p:column>                                        
+                    
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{itemUsu.clienteUsuario.apellidos}" />
+                    </p:column>                    
+
+                    <p:column headerText="Sexo" class="centro">
+                        <h:panelGroup  rendered="#{itemUsu.clienteUsuario.sexo eq 'm'.charAt(0)}">
+                            <i class="fa fa-male fa-lg"></i> 
+                        </h:panelGroup>
+                        <h:panelGroup  rendered="#{itemUsu.clienteUsuario.sexo eq 'f'.charAt(0)}">
+                            <i class="fa fa-female fa-lg"></i> 
+                        </h:panelGroup>                        
+                    </p:column>
+                                        
+                    <p:column headerText="NIF" class="derecha">
+                        <h:outputText value="#{itemUsu.clienteUsuario.nif}" />
+                    </p:column>                                        
+                    
+                    <p:column headerText="Fec. Nacim." class="derecha">
+                        <h:outputText value="#{itemUsu.clienteUsuario.fechaNacimiento}" >
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>                            
+                    </p:column>                                        
+
+                    <p:column headerText="Fec. Alta" class="derecha">
+                        <h:outputText value="#{itemUsu.clienteUsuario.fechaAlta}" >
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>                            
+                    </p:column>
+                                                                                
+                </p:dataTable>                                                
+                </h:form>
+            </p:tab>
+            
+            <p:tab title="Productos">
+                <h:form>
+                <p:dataTable id="tablaProductos" value="#{adminPnlViewMB.modelProd}" var="itemProd" rows="20" paginator="true" resizableColumns="true" liveResize="true"
+                             reflow="true" lazy="true">
+
+                    <f:facet name="header">
+                        <p:commandButton id="elegirColsProd" value="Columnas" type="button" icon="ui-icon-calculator" style="float: right;"/>
+                        <p:columnToggler datasource="tablaProductos" trigger="elegirColsProd"/>
+                        <div style="clear: both"/>
+                    </f:facet>                    
+                    
+                    <p:column headerText="Id" class="centro">
+                        <h:outputText value="#{itemProd.idProducto}" />
+                    </p:column>
+
+                    <p:column headerText="Categoria" class="centro">
+                        <h:outputText value="#{itemProd.categoria.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="Marca" class="centro">
+                        <h:outputText value="#{itemProd.marca.denominacion}" />
+                    </p:column>
+
+                    <p:column headerText="Denomina." class="derecha">
+                        <h:outputText value="#{itemProd.denominacion}" />
+                    </p:column>
+                    
+                    <p:column headerText="Descripci&oacute;n">
+<!--                        <h:outputText value="#{itemProd.descripcion}" />-->
+                    </p:column>                    
+                    
+                    <p:column headerText="Proveedor" class="derecha">
+                        <h:outputText value="#{itemProd.proveedor.razonSocial}" />
+                    </p:column>                    
+                    
+                    <p:column headerText="Precio." class="derecha">
+                        <h:outputText value="#{itemProd.precioUnitario}" >
+                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                        </h:outputText>
+                    </p:column>                                        
+                    
+                    <p:column headerText="Stock" class="centro">
+                        <h:outputText value="#{itemProd.stock}" />
+                    </p:column>                    
+                    
+                    <p:column headerText="Stock Min." class="centro">
+                        <h:outputText value="#{itemProd.stockMinimo}" />
+                    </p:column>                                        
+                    
+                    <p:column headerText="Fec. Alta" class="derecha">
+                        <h:outputText value="#{itemProd.fechaAlta}" >
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>                            
+                    </p:column>                                        
+
+                    <p:column headerText="Oferta" class="centro">
+                        <p:selectBooleanCheckbox value="#{itemProd.prdOferta}" >
+                            <p:ajax update="growl" listener="#{adminPnlViewMB.toggleOfertaProd(itemProd)}" />
+                        </p:selectBooleanCheckbox>                                    
+                    </p:column>
+                    
+                    <p:column headerText="Descata." class="centro">
+                        <p:selectBooleanCheckbox value="#{itemProd.prdDescat}" >
+                            <p:ajax update="growl" listener="#{adminPnlViewMB.toggleDescatProd(itemProd)}" />
+                        </p:selectBooleanCheckbox>                            
+                    </p:column>
+                    
+                    <p:column headerText="Rating" class="centro">
+                        <h:outputText value="#{itemProd.rating}" />
+                    </p:column>                                                            
+                                        
+                </p:dataTable>                                
+                </h:form>
+            </p:tab>
+            
+            <!-- FORMULARIO PARA ENVIAR MENSAJES -->
+            <p:tab id="enviarTab" title="Enviar Mensaje">
+                
+                <p:growl id="msgGrowl" />
+                                
+                <h:form id="enviarMsgUsrForm">
+                    <p:panelGrid id="enviarMsgUsr" columns="2" styleClass="ui-panelgrid-blank">
+
+                        <p:outputLabel value="IDUsuario destino" for="destinatario" />
+                        <p:inputText id="destinatario" value="#{adminPnlViewMB.destinoMsgID}" size="32" required="true">
+                            <f:validateLongRange minimum="1"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Asunto" for="asunto"/>
+                        <p:inputText id="asunto" value="#{adminPnlViewMB.asunto}" size="32" required="true"/>
+
+                        <p:outputLabel value="Mensaje" for="mensaje"/>
+                        <p:inputTextarea id="mensaje" value="#{adminPnlViewMB.mensajeStr}" rows="10" cols="30" maxlength="300" autoResize="false" required="true"
+                                         counter="display" counterTemplate="{0} caracteres restantes." />
+
+                        <h:outputText value=" "/>
+                        <h:outputText id="display" />
+
+                        <h:outputText value=" "/>
+                        <p:commandButton value="Enviar" actionListener="#{adminPnlViewMB.enviarMsg}" process="@form" update="@form, :tabs:msgGrowl"
+                                         style="width: 100%;"/>
+
+                    </p:panelGrid>
+                </h:form>                    
+                                
+            </p:tab>            
+            
+            
+            <!-- LISTA DE MENSAJES RECIBIDOS -->
+            <p:tab id="recibidosTab" title="Mensajes Recibidos">
+                                
+                <h:form id="verRecibidos" >
+
+                    <p:dataTable value="#{adminPnlViewMB.mensajesR}" var="msgR"  
+                                 rows="10" paginator="true" paginatorAlwaysVisible="false" 
+                                 resizableColumns="true" liveResize="true" reflow="true"
+                                 emptyMessage="No hay mensajes para este usuario" sortBy="#{msgR.fecha}" sortOrder="descending">
+
+                        <f:facet name="header">
+                            <h:outputText value="Mensajes Recibidos"/>
+                        </f:facet>                            
+
+                        <p:column headerText="Origen">
+                            <h:outputText value="#{msgR.origen.email}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" />
+                            <h:outputText value="#{msgR.origen.email}" rendered="#{msgR.msgLeido}" />
+                        </p:column>
+
+                        <p:column headerText="Leido" class="centro">
+                            <h:outputText value="#{msgR.leido}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" />
+                            <h:outputText value="#{msgR.leido}" rendered="#{msgR.msgLeido}" />
+                        </p:column>                            
+
+                        <p:column headerText="Asunto">
+                            <h:outputText value="#{msgR.asunto}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" />
+                            <h:outputText value="#{msgR.asunto}" rendered="#{msgR.msgLeido}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{msgR.fecha}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" >
+                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                            </h:outputText>
+                            <h:outputText value="#{msgR.fecha}" rendered="#{msgR.msgLeido}" >
+                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                            </h:outputText>                                
+                        </p:column>                            
+
+                        <p:column headerText="Mensaje" class="centro">
+                            <p:commandButton value="Leer" icon="fa fa-envelope" 
+                                             actionListener="#{adminPnlViewMB.leerMensaje(msgR)}" update=":msgTxt" oncomplete="PF('msgDlg').show()"
+                                             style="font-size: 0.8em;" />
+                        </p:column>
+
+                    </p:dataTable>                        
+
+                </h:form>
+                                
+            </p:tab>
+                    
+            <!-- LISTA DE MENSAJES ENVIADOS -->            
+            <p:tab id="enviadosTab" title="Mensajes Enviados">
+                
+                <h:form id="verEnviados" >
+
+                    <p:dataTable value="#{adminPnlViewMB.mensajesE}" var="msgE"  
+                                 rows="10" paginator="true" paginatorAlwaysVisible="false" 
+                                 resizableColumns="true" liveResize="true" reflow="true"
+                                 emptyMessage="No hay mensajes para este usuario" sortBy="#{msgE.fecha}" sortOrder="descending">
+
+                        <f:facet name="header">
+                            <h:outputText value="Mensajes Enviados"/>
+                        </f:facet>                            
+
+                        <p:column headerText="Origen">
+                            <h:outputText value="#{msgE.origen.email}" style="font-weight: bold;" rendered="#{not msgE.msgLeido}" />
+                            <h:outputText value="#{msgE.origen.email}" rendered="#{msgE.msgLeido}" />
+                        </p:column>
+
+                        <p:column headerText="Leido" class="centro">
+                            <h:outputText value="#{msgE.leido}" style="font-weight: bold;" rendered="#{not msgE.msgLeido}" />
+                            <h:outputText value="#{msgE.leido}" rendered="#{msgE.msgLeido}" />
+                        </p:column>                            
+
+                        <p:column headerText="Asunto">
+                            <h:outputText value="#{msgE.asunto}" style="font-weight: bold;" rendered="#{not msgE.msgLeido}" />
+                            <h:outputText value="#{msgE.asunto}" rendered="#{msgE.msgLeido}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{msgE.fecha}" style="font-weight: bold;" rendered="#{not msgE.msgLeido}" >
+                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                            </h:outputText>
+                            <h:outputText value="#{msgE.fecha}" rendered="#{msgE.msgLeido}" >
+                                <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                            </h:outputText>                                
+                        </p:column>                            
+
+                        <p:column headerText="Mensaje" class="centro">
+                            <p:commandButton value="Leer" icon="fa fa-envelope" 
+                                             actionListener="#{adminPnlViewMB.leerMensaje(msgE)}" update=":msgTxt" oncomplete="PF('msgDlg').show()"
+                                             style="font-size: 0.8em;" />
+                        </p:column>
+
+                    </p:dataTable>                        
+
+                </h:form>
+                                                
+            </p:tab>                       
+            
+        </p:tabView>
+        
+        
+        <p:dialog header="Mensaje" widgetVar="msgDlg" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+
+            <p:outputPanel id="msgTxt" style="text-align:center;">                                
+                <h:outputText value="#{adminPnlViewMB.msgSeleccionado.mensaje}" />
+            </p:outputPanel>
+
+            <p:ajax event="close" update=":tabs:verRecibidos, :tabs:verEnviados"/>
+        </p:dialog>                        
+        
+                
+    </ui:composition>
+</h:body>
+</html>

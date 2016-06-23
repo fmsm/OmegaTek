@@ -1,0 +1,280 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        
+        <!-- STEP 1 (IDENTIFICACION)-->
+        <p:panel header="Identificaci&oacute;n" rendered="#{checkoutViewMB.stepNum eq 0}" >
+            
+            <h:form style="padding: 3em;">
+                
+                <h:outputText value="Inicia sesi&oacute;n con tu cuenta. &lt;br/&gt;O crea una nueva para poder continuar con tu pedido." escape="false"
+                              class="centroVertical centroHoriz" style="font-size: 1.5em; font-weight: bold;" />
+                 
+                <div class="centroVertical centroHoriz" style="margin-top: 1.5em; justify-content: space-around;">
+                    <p:commandButton value="#{mensajes.comunLogin}" onclick="PF('loginCkDlg').show();" icon="fa fa-sign-in" />                    
+
+                    <p:commandButton value="#{mensajes.comunReg}" onclick="PF('signupCkDlg').show();" icon="fa fa-user-plus" />        
+                </div>
+                
+            </h:form>
+        </p:panel>
+
+<p:dialog id="loginCkDlg" widgetVar="loginCkDlg" width="400" resizable="false" modal="true" closable="false" responsive="true" showEffect="slide" hideEffect="slide">
+    <ui:include src="/resources/vistas/comun/dlgLogin.xhtml"/>   
+    <p:ajax event="close" listener="#{checkoutViewMB.continuar(1)}" update="@all"/>
+</p:dialog>            
+            
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if(args.validationFailed || !args.loginCorrecto) {
+                    PF('loginCkDlg').jq.effect("shake", {times:5}, 100);
+                }
+                else {
+                    PF('loginCkDlg').hide();
+                    //$('#loginDlg').fadeOut();
+                }
+            }
+        </script>    
+            
+
+<!--    DIALOG: CREAR CUENTA -->        
+<p:dialog id="signupCkDlg" widgetVar="signupCkDlg" width="450" resizable="false" modal="true" closable="false" responsive="true" showEffect="slide" hideEffect="slide">            
+    <ui:include src="/resources/vistas/comun/dlgRegistro.xhtml"/>
+    <!--aqui a diferencia de en '/comun/nav.html; no se ejecuta .recuperarPedido -->
+    <p:ajax event="close" listener="#{checkoutViewMB.continuar(1)}" update="@all"/>
+</p:dialog>        
+
+        <script type="text/javascript">
+            function handleRegRequest(xhr, status, args) {
+                if(args.validationFailed || !args.loginCorrecto) {
+                    PF('signupCkDlg').jq.effect("shake", {times:5}, 100);
+                }
+                else {
+                    PF('signupCkDlg').hide();
+                    //$('#signupDlg').fadeOut();
+                }
+            }
+        </script>        
+
+        
+        
+        
+        <!-- STEP 2 (DIRECCION)-->
+        <!-- SE PODRIA QUITAR ESTE PANEL DE ABAJO Y PONER LOS DOS PANELS CON EL RENDERED -->
+        <p:panel rendered="#{checkoutViewMB.stepNum eq 1}" 
+                 style="background-color: whitesmoke; border: none;">
+            
+            <p:growl id="mensaje" escape="true" />
+                        
+            <div class="ui-grid-row">
+                
+                <!-- MOSTRAR/SELECCIONAR DIRECCION -->
+                <div class="ui-grid-col-6">
+                    
+                    <p:panel header="Direcciones guardadas" style="height: 100%;">
+                    
+                        <h:form id="elegirDir">
+                                                        
+                            <h:outputText value="Usuario :" 
+                                          style="display: inline-block; font-weight: bold;" /> 
+                            <br/>
+                            <h:outputText value="#{session.getAttribute('nomUsuario')}"
+                                          style="display: inline-block; margin-top: 0.5em;" />
+                            
+                            <h:outputText value="#{checkoutViewMB.txtDirsDisponibles}" 
+                                          style="display: inline-block; margin-left: 1em;"/>
+                            <br/>
+                            <h:outputText value="Seleccionar direccion : " 
+                                          style="display: inline-block; margin-top: 1em; font-weight: bold;" />
+                            <div>                                
+                                <p:outputLabel for="dirs" value="Lista direcciones" 
+                                               style="margin-right: 1em;" />                                
+                                
+                                <p:selectOneMenu id="dirs" value="#{checkoutViewMB.idDirSeleccionada}" effect="fold">
+                                    <f:selectItem itemLabel="Elige una" itemValue=""/>
+                                    <f:selectItems value="#{checkoutViewMB.dirsCliente}" var="item" 
+                                                   itemLabel="#{item.nombreDireccion}" itemValue="#{item.idDireccion}" />                                        
+                                    
+                                    <p:ajax event="itemSelect" update="@form" />  
+                                            
+                                </p:selectOneMenu>                                
+
+<!--                                <h:outputText id="continuarTxt" value="#{checkoutViewMB.dirEnvio.nombreDireccion}" rendered="#{checkoutViewMB.dirEnvio != null}"
+                                              style="margin-right: 2em;" />-->
+                            </div>
+                                
+                            <br/>
+                            <p:commandButton  id="continuarBtn" value="Continuar" disabled="#{checkoutViewMB.idDirSeleccionada eq 0}"
+                                              actionListener="#{checkoutViewMB.continuar(2)}" update="@all"/>                                                    
+
+
+                        </h:form>
+                        
+                    </p:panel>
+                    
+                </div>
+                
+                <!-- AÑADIR DIRECCION -->
+                <div class="ui-grid-col-6">
+                    <p:panel header="A&ntilde;adir nueva direcci&oacute;n"  style="height: 100%;">                        
+                        <ui:include src="/resources/vistas/comun/addDirForm.xhtml"/>
+                    </p:panel>                                                
+                </div>
+                                
+            </div>
+            
+        </p:panel>
+        
+        
+        
+        
+        <!-- STEP 3 (FORMA DE PAGO)-->
+        
+        <p:panel header="Forma de Pago" rendered="#{checkoutViewMB.stepNum eq 2}">
+            
+            <p:growl id="mensajePago" autoUpdate="true" escape="false" />
+            
+            <h:form id="elegirPago" style="padding: 1em;">                
+
+                <p:selectOneRadio id="formaPago" value="#{checkoutViewMB.formaPago}" layout="grid" columns="1" required="true"
+                                  style="margin-bottom: 1em;">
+                    <f:selectItem itemLabel="PayPal" itemValue="1" />
+                    <f:selectItem itemLabel="Tarjeta de Cr&eacute;dito/D&eacute;bito" itemValue="2" />
+                    <f:selectItem itemLabel="Transferencia Bancaria" itemValue="3" />
+                </p:selectOneRadio>
+
+                <p:commandButton  value="Continuar" actionListener="#{checkoutViewMB.continuar(3)}" update="@all"/>
+                
+            </h:form>
+            
+        </p:panel>
+        
+        
+        
+        <!-- STEP 4 (CONFIRMACION)-->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                
+                <p:growl id="mensajeConf" autoUpdate="true" escape="false" />
+                
+                <p:dataList value="#{cestaMB.cesta}" var="item" type="none" rendered="#{checkoutViewMB.stepNum eq 3}" >
+                    <f:facet name="header">
+                        <h:outputText value="Confirmaci&oacute;n" style="text-align: left;"/>
+                    </f:facet>                    
+
+        <!--                             Columnas: Producto, Denominacion, Prec Unitario, Cantidad, Importe total -->
+                    <p:panelGrid columns="8" layout="grid" styleClass="ui-panelgrid-blank"
+                                columnClasses="ui-grid-col-2 centroVertical centroHoriz, 
+                                               ui-grid-col-5 centroVertical, 
+                                               ui-grid-col-2 centroVertical derechaHoriz,
+                                               ui-grid-col-1 centroVertical derechaHoriz,
+                                               ui-grid-col-2 centroVertical derechaHoriz" >
+
+                        <p:graphicImage library="imagenes/productos" name="#{item.producto.imagenes.get(0).imagen}" 
+                                            width="100px" styleClass="falsoMarco"/>
+
+                        <h:outputText value="#{item.producto.denominacion}"/>
+
+                        <h:outputText value="#{item.precioUnitario}">
+                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                        </h:outputText>
+
+                        <h:outputText value="#{item.cantidad}"/>
+
+                        <h:outputText value="#{item.cantidad * item.precioUnitario}">
+                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                        </h:outputText>
+
+                    </p:panelGrid>
+
+                </p:dataList>
+
+                <p:separator rendered="#{checkoutViewMB.stepNum eq 3}"/>
+
+
+                <!-- DETALLES DEL IMPORTE TOTAL DEL PEDIDO (baseImponible, descuento, gastos de envio, iva, total-->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">        
+
+                        <p:panelGrid layout="grid" columns="3" rendered="#{checkoutViewMB.stepNum eq 3}" style="background-color: white;"
+                                     columnClasses="ui-grid-col-8, 
+                                                    ui-grid-col-2 izquuierda,
+                                                    ui-grid-col-2 derecha">
+
+                            <h:outputText value=" "/>
+                            <h:outputText value="Base Imponible" 
+                                          style="margin-right: 2em;"/>                    
+                            <h:outputText value="#{cestaMB.pedidoActual.baseImponible}">
+                                <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText>                    
+
+                            <h:outputText value=" "/>
+                            <h:outputText value="IVA" 
+                                          style="margin-right: 2em;"/>                    
+                            <h:outputText value="#{cestaMB.pedidoActual.iva}">
+                                <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText>                    
+
+                            <h:outputText value=" "/>
+                            <h:outputText value="Gastos de envio"
+                                          style="margin-right: 2em;"/>                    
+                            <h:outputText value="#{cestaMB.pedidoActual.gastosEnvio}">
+                                <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText>                    
+
+                            <h:outputText value=" "/>
+                            <h:outputText value="TOTAL" 
+                                          style="margin-right: 2em; font-weight: bold;"/>                    
+                            <h:outputText value="#{cestaMB.pedidoActual.baseImponible + cestaMB.pedidoActual.iva + cestaMB.pedidoActual.gastosEnvio}"
+                                          style="font-weight: bold;">
+                                <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                            </h:outputText>                    
+
+                        </p:panelGrid>
+
+                    </div>
+                </div>
+
+                <p:separator rendered="#{checkoutViewMB.stepNum eq 3}"/>
+
+
+                <!-- BOTONES  -->  
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <h:form rendered="#{checkoutViewMB.stepNum eq 3}">
+                            <div style="display: flex; justify-content: space-between">
+                                <p:commandButton value="Volver a Inicio" action="index?faces-redirect=true" ajax="false"/>
+                                <p:commandButton value="Finalizar Pedido" actionListener="#{cestaMB.finalizar}" />
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+                
+                <p:separator rendered="#{checkoutViewMB.stepNum eq 3}"/>
+        
+            </div>
+        </div>
+        
+        
+        <p:dialog header="Gracias" widgetVar="dlgCheckout" modal="true" height="200">
+            <h:outputText value="Pedido realizado con exito.&lt;br/&gt;Gracias por confiar en OmegaTek." escape="false"/>
+            <f:facet name="footer">
+                <p:button value="Volver a Inicio" outcome="index?faces-redirect=true" />
+            </f:facet>              
+        </p:dialog>         
+                        
+    </ui:composition>
+</h:body>
+</html>

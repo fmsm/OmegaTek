@@ -1,0 +1,92 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        
+        <p:growl id="cestaGrowl" showDetail="true"/>
+        
+        <!-- LISTA DE PRODUCTOS INCLUIDOS HASTA AHORA EN LA CESTA -->
+        <h:form id="contentCesta">
+            <p:dataList value="#{cestaMB.cesta}" var="item" type="none" emptyMessage="CESTA VACIA">
+                
+                <f:facet name="header">
+                    <h:outputText value="Mi Cesta"/>
+                </f:facet>
+
+    <!--                         Columnas: Producto, Denominacion, Prec Unitario, boton + , Cantidad, boton -, Importe total, Eliminar -->
+                <p:panelGrid columns="8" layout="grid"
+                            columnClasses="ui-grid-col-2 centroVertical centroHoriz, 
+                                           ui-grid-col-4 centroVertical, 
+                                           ui-grid-col-1 centroVertical derechaHoriz,
+                                           ui-grid-col-1 centroVertical derechaHoriz,
+                                           ui-grid-col-1 centroVertical centroHoriz,
+                                           ui-grid-col-1 centroVertical izquierdaHoriz,
+                                           ui-grid-col-1 centroVertical derechaHoriz, 
+                                           ui-grid-col-1 centroVertical centroHoriz">
+
+                    <p:graphicImage library="imagenes/productos" name="#{item.producto.imagenes.get(0).imagen}" 
+                                        width="100px" styleClass="falsoMarco"/>
+
+                    <h:outputText value="#{item.producto.denominacion}"/>
+
+                    <h:outputText value="#{item.precioUnitario}">
+                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>
+
+                    <!-- mostrar este boton solo si las unidades que hay en stock son suficientes para satisfacer un pedido de un numero de unidades igual al actual mas 1 -->
+                    <p:commandButton actionListener="#{cestaMB.plus(item)}" update="cestaGrowl, @form, :headForm:cesta" icon="ui-icon-plusthick" 
+                                     rendered="#{item.producto.stock gt (item.cantidad + 1)}"/>   
+                    
+                    <h:outputText value="#{item.cantidad}"/>
+                    <p:commandButton actionListener="#{cestaMB.minus(item)}" update="cestaGrowl, @form, :headForm:cesta" icon="ui-icon-minusthick" disabled="#{item.cantidad eq 1}"/>
+
+                    <h:outputText value="#{item.cantidad * item.precioUnitario}">
+                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>
+
+                    <p:commandButton actionListener="#{cestaMB.remove(item)}" update="cestaGrowl, @form, :headForm:cesta" icon="ui-icon-trash" />
+                </p:panelGrid>
+                
+            </p:dataList>
+            
+            <p:separator rendered="#{cestaMB.cesta != null}"/>
+            
+            <!-- IMPORTE TOTAL ACUMULADO EN LA CESTA -->
+            
+            <p:panel rendered="#{cestaMB.cesta != null}">
+                <div style="display: flex; justify-content: flex-end">
+                    <h:outputText value="Total" style="margin-right: 2em;"/>                    
+                    <h:outputText value="#{cestaMB.calcTotal()}">
+                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>                    
+                </div>
+            </p:panel>
+            
+            <!-- BOTONES CONTINUAR COMPRANDO O TRAMITAR PEDIDO  -->
+            
+            <p:separator />
+            
+            <div style="display: flex; justify-content: space-between">
+                <p:commandButton value="Seguir Comprando" action="categorias?faces-redirect=true" ajax="false" />
+                <p:commandButton id="btnTramitar" value="Tramitar Pedido" action="checkout?faces-redirect=true" ajax="false" disabled="#{cestaMB.cesta == null}" />
+            </div>
+            
+            <p:separator/>
+            
+        </h:form>
+
+        
+    </ui:composition>
+</h:body>
+</html>

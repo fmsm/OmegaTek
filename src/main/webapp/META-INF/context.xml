@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/OmegaTek">
+    
+    <Resource name="BeanManager" 
+              auth="Container"
+              type="javax.enterprise.inject.spi.BeanManager"
+              factory="org.jboss.weld.resources.ManagerObjectFactory" />
+              
+    <Resource auth="Container" 
+              driverClassName="com.mysql.jdbc.Driver" 
+              maxIdle="50" 
+              name="jdbc/jndi-pool" 
+              username="clientejava"
+              password="2015" 
+              type="javax.sql.DataSource" 
+              url="jdbc:mysql://localhost:3306/empresaweb?autoReconnect=true" />
+</Context>

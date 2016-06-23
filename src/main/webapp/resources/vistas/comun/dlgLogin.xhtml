@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+<ui:composition>
+    
+
+
+    <p:growl id='loginGrowl'/>
+    
+    <h:form id="loginDlgForm">
+        <p:panel id="loginDlgPanel" styleClass="ui-panelgrid-blank"
+                 style="border: none;">
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12" 
+                     style="display: flex; justify-content: center; align-items: center;">
+
+                    <i class="fa fa-sign-in fa-2x" style="margin-right: 20px;"></i>
+                    <h:outputText value="#{mensajes.comunLogin}"/>
+
+                </div>            
+            </div>        
+
+            <p:separator/>
+
+            <!-- AL FINAL LO HE QUITADO, PORQUE TENGO QUE AVERIGUAR COMO HACER PARA QUE DESAPAREZCA EL MENSAJE DE ERROR O EXITO
+            AL CERRAR Y VOLVER A ABRIR EL DIALOG
+            asi solo sale el mensaje,sin detales -->
+    <!--    <p:messages globalOnly="true" closable="true"/>     -->
+
+            <div class="ui-grid-row">
+                <p:outputLabel for="email" value="#{mensajes.comunDlgEmail}" styleClass="ui-grid-col-6"/>                
+<!--            <p:message for="email" styleClass="ui-grid-col-6" />-->
+            </div>
+
+            <div class="ui-grid-row" style="margin-bottom: 10px;">
+                <p:inputText id="email" value="#{accesoViewMB.email}"  tabindex="1" 
+                             required="true"
+                             validatorMessage="#{errVal.valComunDlgEmail}"
+                             placeholder="#{mensajes.comunInputEmail}"                             
+                             styleClass="ui-grid-col-12">
+                    <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$" for="email" /> 
+                </p:inputText>
+                <!-- regexp sacada de http://www.regular-expressions.info/email.html -->
+            </div>
+
+            <div class="ui-grid-row">
+                <p:outputLabel for="password" value="#{mensajes.comunDlgPass}" styleClass="ui-grid-col-6"/>        
+<!--            <p:message for="password" styleClass="ui-grid-col-6"/>        -->
+            </div>
+
+            <div class="ui-grid-row" style="margin-bottom: 10px;">
+                <p:password id="password" value="#{accesoViewMB.password}"  tabindex="2"
+                            required="true"
+                            validatorMessage="#{errVal.valComunDlgPass}"
+                            styleClass="ui-grid-col-12"  style="margin-bottom: 10px;">
+                    <f:validateLength minimum="5" maximum="12" for="password" />
+                </p:password>
+                
+            </div>
+
+            <div class="ui-grid-row"  style="margin-bottom: 15px;">
+                <div class="ui-grid-col-12"
+                     style="display: flex; justify-content: space-between;">
+
+                    <p:outputLabel for="cerrar" value="Recordarme" style="align-self: center;"/>
+                    <p:inputSwitch id="cerrar" value="#{accesoViewMB.recordarme}" offLabel="no" onLabel="si"/>        
+
+                </div>
+            </div>
+
+            <div class="ui-grid-row">
+
+                <p:commandButton value="#{mensajes.comunCancelar}" icon="fa fa-chevron-circle-left" immediate="true" onclick="PF('dlg').hide()" 
+                                 class="ui-grid-col-5"/>
+                <div class="ui-grid-col-2"></div>
+                <p:commandButton value="#{mensajes.comunAceptar}" icon="fa fa-chevron-circle-right" iconPos="right" tabindex="3"                                         
+                                 process="@form" update="loginGrowl, loginDlgPanel, @(.ui-menu)" actionListener="#{accesoViewMB.login(event)}" 
+                                 oncomplete="handleLoginRequest(xhr, status, args)" 
+                                 class="ui-grid-col-5"/>                
+            </div>
+
+        </p:panel>
+    </h:form>
+    
+</ui:composition>
+
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        
+        <!--  5a VERSION (sin flexbox) -->
+        <h:form id="headForm">    <!-- pongo id para facilitar el acceso a los componentes incluidos en el form (NO SE SI ES NECESARIO) -->
+
+        <div class="ui-grid-row" style="display: flex; align-items: center;">
+            
+            <!-- LOGO -->
+            <div class="ui-grid-col-2">                
+                <p:link outcome="index" style="display: flex; justify-content: center;">
+                    <p:graphicImage url="/resources/imagenes/logo_t.png" style="height: 100px;"/>
+                </p:link>
+            </div>
+            
+            <!-- P:AUTOCOMPLETE Y BOTON BUSCAR -->
+            <p:autoComplete class="ui-grid-col-6" tabindex="1" cache="true"
+                            id="buscarProd"  placeholder="#{mensajes.comunInputBuscar}" value="#{indexViewMB.textoAC}" 
+                            completeMethod="#{indexViewMB.aCompletar}" minQueryLength="2" queryDelay="500" maxResults="5" 
+                            inputStyle="width: 100%;">
+                <p:ajax event="itemSelect" listener="#{indexViewMB.acItemSel}" /> <!-- si pongo .acItemSel(event) el evento llega como nulo al metodo del MB!!!???-->
+            </p:autoComplete>
+
+            <p:commandButton class="ui-grid-col-2" id="buscarProdBtn" value="#{mensajes.comunBtnBuscar}" action="resultados" icon="fa fa-search" ajax="false"/>
+
+            <!-- ICONO CARRITO  -->                        
+            
+            <h:panelGroup class="ui-grid-col-2" id="cesta" layout="block"  
+                          style="position: relative; display: flex; justify-content: center; align-items: center;">
+                
+                <p:link outcome="cesta" disabled="#{cestaMB.cesta eq null or empty cestaMB.cesta}">
+
+                    <div>
+                        <i class="fa fa-shopping-cart fa-4x" style="color: #FAAF3B;"></i>
+                    </div>
+
+                    <div>
+                        <span id="numProductos" class="contProdCesta">                        
+                            <p:outputLabel value="0" class="numProdCesta" rendered="#{cestaMB.cesta == null}" />
+                            <p:outputLabel value="#{cestaMB.calcNumProdCesta()}" class="numProdCesta" rendered="#{cestaMB.cesta != null}"/>                        
+                        </span>                        
+                    </div>
+                    
+                </p:link>
+                
+            </h:panelGroup>
+
+        </div>  
+            
+        </h:form>
+                
+    </ui:composition>
+</h:body>
+</html>

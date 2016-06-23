@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    
+<ui:composition>
+
+    
+    <p:growl id="signupGrowl"/>
+    
+    <h:form id="signupDlgForm">
+
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <i class="fa fa-user-plus fa-2x" style="margin-right: 20px;"></i>
+                    <h:outputText value="#{mensajes.comunLogin}"/>
+                </div>        
+            </div>
+        </div>
+
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p:separator/>
+            </div>
+        </div>
+
+        <!-- email -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <p:outputLabel for="emailInput" value="#{mensajes.comunDlgEmail}" class="bold" />
+            </div>
+            <div class="ui-grid-col-8">
+<!--                <p:message for="emailInput" />        -->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:inputText id="emailInput" value="#{accesoViewMB.email}" 
+                             required="true"
+                             validatorMessage="#{errVal.valComunDlgEmail}"
+                             placeholder="#{mensajes.comunInputEmail}"
+                             style="width: 100%;">
+                    <f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$" for="emailInput" />
+<!--                    <p:ajax event="change" process="@this" update="signupGrowl" listener="#{accesoViewMB.buscarEmail()}" />                    -->
+                </p:inputText>        
+            </div>
+        </div>
+
+        <!-- password -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <p:outputLabel for="claveInput" value="#{mensajes.comunDlgPass}" class="bold" />
+            </div>
+            <div class="ui-grid-col-8">
+<!--                <p:message for="claveInput" />                        -->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:password id="claveInput" value="#{accesoViewMB.password}" match="claveMatch"  required="true" 
+                               style="width: 100%;">
+                    <f:validateLength minimum="5" maximum="12" for="claveInput" />
+                    <pe:keyFilter mask="alphanum"/>
+                </p:password>
+            </div>
+        </div>
+
+        <!-- repetir password -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-6">
+                <p:outputLabel for="claveMatch" value="#{mensajes.comunDlgPassMatch}" class="bold" />
+            </div>
+            <div class="ui-grid-col-6">
+<!--                <p:message for="claveInput" />                        -->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:password id="claveMatch" value="#{accesoViewMB.passwordMatch}" required="true" 
+                               style="width: 100%;">
+                    <f:validateLength minimum="5" maximum="12" for="claveMatch" />
+                </p:password>
+            </div>
+        </div>        
+        
+        <!-- nombre -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <p:outputLabel for="nombreInput" value="#{mensajes.comunDlgNom}" class="bold" />
+            </div>
+            <div class="ui-grid-col-8">
+<!--                <p:message for="nombreInput"/>-->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:inputText id="nombreInput" value="#{accesoViewMB.nomReg}" required="true"
+                             placeholder="#{mensajes.comunInputNom}" 
+                             style="width: 100%;">
+                    <pe:keyFilter regEx="/[a-z áéíóúüñ]/i"/>
+                </p:inputText>
+            </div>
+        </div>
+
+        <!-- apellidos -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <p:outputLabel for="apellidosInput" value="#{mensajes.comunDlgApe}" class="bold" />
+            </div>
+            <div class="ui-grid-col-8">
+<!--                <p:message for="apellidosInput" />-->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:inputText id="apellidosInput" value="#{accesoViewMB.apeReg}"  required="true"
+                             placeholder="#{mensajes.comunInputApe}" 
+                             style="width: 100%;">
+                    <pe:keyFilter regEx="/[a-z áéíóúüñ]/i"/>
+                </p:inputText>                    
+            </div>
+        </div>
+
+        <!-- nif -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <p:outputLabel for="nifInput" value="NIF" class="bold" />
+            </div>
+            <div class="ui-grid-col-8">
+<!--                <p:message for="nifInput" />-->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:inputText id="nifInput" value="#{accesoViewMB.nifReg}" required="true"
+                             placeholder="12345678A" 
+                             style="width: 100%;">
+                    <pe:keyFilter regEx="/[a-z0-9]/i"/>
+                    <f:validateRegex pattern="^[0-9]{8}[a-zA-Z]{1}$" for="nifInput" />
+                    <!-- FALTA VALIDAR QUE SEA UN NIF VALIDO -->
+                </p:inputText>                    
+            </div>
+        </div>        
+        
+        <!-- fecha nacimiento -->
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <p:outputLabel for="fecNacInput" value="#{mensajes.comunDlgFecNac}" class="bold" />
+            </div>
+            <div class="ui-grid-col-8">
+<!--                <p:message for="fecNacInput" />-->
+            </div>    
+        </div>
+
+        <div class="ui-grid-row" style="margin-bottom: 10px;">
+            <div class="ui-grid-col-12">
+                <p:inputText id="fecNacInput" value="#{accesoViewMB.fecNacReg}" 
+                             converterMessage="#{errVal.cnvFormato}"
+                             validator="validadorFecha"
+                             placeholder="#{mensajes.comunInputFecNac}" 
+                             style="margin-bottom: 10px; width: 100%;">
+                    <f:convertDateTime pattern="dd-MM-yyyy" />
+                    <pe:keyFilter mask="int"/>
+                </p:inputText>                                        
+                <!--también se valida automaticamente que la fecha sea real (ejemplo: 31-02-2016 no valida, ni 31-04-2015)
+                y que no sea una fecha futura (para eso uso el validador propio "validadorFecha"-->
+            </div>
+        </div>
+
+                        
+        <div style="display: flex; justify-content: space-between;">
+            <p:commandButton value="#{mensajes.comunCancelar}" icon="fa fa-chevron-circle-left" immediate="true" onclick="PF('signupDlg').hide()" 
+                             class="ui-grid-col-5"/>
+
+            <p:commandButton value="#{mensajes.comunEnviar}" icon="fa fa-chevron-circle-right" iconPos="right"                                      
+                             process="@form" update="signupGrowl, signupDlgForm, @(.ui-menu)" actionListener="#{accesoViewMB.registro()}" 
+                             oncomplete="handleRegRequest(xhr, status, args)" 
+                             class="ui-grid-col-5"/>
+        </div>        
+
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12" style="display: flex; justify-content: center; align-items: center;">
+                <h:outputText value="#{mensajes.comunDlgObl}"/>
+            </div>
+        </div>
+        
+    </h:form>
+
+</ui:composition>
+
+</html>

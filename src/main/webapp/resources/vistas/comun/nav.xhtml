@@ -1,0 +1,116 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+                
+<!--     BARRA DE MENUS -->
+
+    <p:growl id="growl"/>
+
+<!--     <p:separator style="margin: 0; border: 1px dotted gainsboro;"/>-->
+        <p:separator/>
+        
+        <h:form id="navForm">    <!-- pongo id para facilitar el acceso a los componentes incluidos en el form (NO SE SI ES NECESARIO) -->
+                
+<!--        styleClass="bg-Blanco no-Border"--> <!-- style="font-weight: bold; padding-right: 2em;" -->
+            <p:menubar id="navMenu">                
+                <p:menuitem icon="fa fa-home" ajax="false" outcome="index" />
+                <p:menuitem value="#{mensajes.comunMnuItemIni}" ajax="false" outcome="index" />
+                <p:menuitem value="#{mensajes.comunMnuItemCat}" ajax="false" outcome="categorias" />                
+                <p:menuitem value="#{mensajes.comunMnuItemOfe}" ajax="false" disabled="true"/>
+                <p:menuitem value="#{mensajes.comunMnuItemConf}" ajax="false" disabled="true"/>  
+                
+<!--            Obligatoriamente el nombre del facet debe ser options, si no parece ser que no lo renderiza -->
+                <f:facet name="options">    
+<!--                style="margin-right: 0.5em;"--> 
+
+<!--                Usuario Anonimo / sin identificar -->
+                    <p:commandButton value="#{mensajes.comunLogin}" icon="fa fa-sign-in" onclick="PF('dlg').show();" 
+                                     rendered="#{session.getAttribute('userID') eq null}" />
+
+                    <p:commandButton value="#{mensajes.comunReg}" icon="fa fa-user-plus" onclick="PF('signupDlg').show()"
+                                     rendered="#{session.getAttribute('userID') eq null}" />
+
+<!--                Usuario Logeado -->                    
+                    <div style="display: flex; align-items: center;">
+                        
+                        <p:graphicImage library="imagenes" name="businessman.png" height="32px" 
+                                        rendered="#{session.getAttribute('userID') != null}"
+                                        style="margin-right: 10px;"/>
+                        
+                        <h:outputText value="#{session.getAttribute('nomUsuario')}" 
+                                      rendered="#{session.getAttribute('userID') != null}"
+                                      style="margin-right: 10px;"/>
+                        
+                        <p:splitButton value="#{mensajes.comunSptBtnMyAcc}" action="user?faces-redirect=true" icon="fa fa-cog" iconPos="left" 
+                                       rendered="#{session.getAttribute('userID') != null}">
+                            <p:menuitem value="&nbsp;#{mensajes.comunSptBtnFav}" icon="fa fa-star" />
+                            <p:menuitem value="&nbsp;#{mensajes.comunSptBtnLogout}" icon="fa fa-sign-out " 
+                                        update="growl, :navForm:navMenu, :headForm" actionListener="#{accesoViewMB.logout}"/>                                                                                            
+
+                        </p:splitButton>
+                        
+                    </div>
+                    
+                </f:facet>
+            </p:menubar>
+        </h:form>            
+
+<!--    <p:separator style="margin: 0; border: 1px dotted gainsboro;"/>-->
+        <p:separator/>   
+
+        
+<!--    DIALOG: INICIAR SESION (AQUI HE TENIDO QUE USAR BASTANTE STYLE PARA EL DIALOG)-->        
+<p:dialog id="loginDlg" widgetVar="dlg" width="400" resizable="false" modal="true" closeOnEscape="true" responsive="true" showEffect="slide" hideEffect="slide">
+    <ui:include src="/resources/vistas/comun/dlgLogin.xhtml"/>        
+            
+    <!-- cuando el ususario haga login correctamente, se busca info de pedidos anteriores (tipo 'n') y si los hay, introduce dicha info en los 
+         atributos correspondientes de sessionBean cestaMB-->
+    <p:ajax event="close" listener="#{cestaMB.recuperarPedidoUsuario}" update=":headForm:cesta"/>    
+</p:dialog>    
+        
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if(args.validationFailed || !args.loginCorrecto) {
+                    PF('dlg').jq.effect("shake", {times:5}, 100);
+                }
+                else {
+                    PF('dlg').hide();
+                    //$('#loginDlg').fadeOut();
+                }
+            }
+        </script>    
+        
+<!--    DIALOG: CREAR CUENTA -->        
+<p:dialog id="signupDlg" widgetVar="signupDlg" width="450" resizable="false" modal="true" closeOnEscape="true" responsive="true" showEffect="slide" hideEffect="slide">    
+        
+    <ui:include src="/resources/vistas/comun/dlgRegistro.xhtml"/>   
+        
+</p:dialog>        
+
+        <script type="text/javascript">
+            function handleRegRequest(xhr, status, args) {
+                if(args.validationFailed || !args.loginCorrecto) {
+                    PF('signupDlg').jq.effect("shake", {times:5}, 100);
+                }
+                else {
+                    PF('signupDlg').hide();
+                    //$('#signupDlg').fadeOut();
+                }
+            }
+        </script>        
+        
+    </ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+                
+            <h:form id="addDirForm">
+                <p:growl id="mensajeAdd" autoUpdate="true" escape="false" />
+                
+                <!-- NOMBREDIRECCION (denominacion) -->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4" style="margin: 3px 5px;">    <!--este margin es para que al salir los mensajes de error al lado, el formulario quede igual que con los mensajes ocultos-->
+                        <p:outputLabel for="denInput" value="Denominaci&oacute;n" 
+                                       class="bold"/>
+                    </div>
+                    <div class="ui-grid-col-8">
+<!--                        <p:message for="denInput"/>-->
+                    </div>    
+                </div>
+
+                <div class="ui-grid-row" style="margin-bottom: 10px;">
+                    <div class="ui-grid-col-12">
+                        <p:inputText id="denInput" value="#{checkoutViewMB.denominacion}" 
+                                     required="true"
+                                     placeholder="Domicilio habitual" 
+                                     style="width: 100%;">
+                            <pe:keyFilter regEx="/[a-z áéíóúüñ0-9]/i"/>
+                        </p:inputText>
+                    </div>
+                </div>
+
+                
+                <!-- DIRECCION (direccionStr) -->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4" style="margin: 3px 5px;">
+                        <p:outputLabel for="dirInput" value="Direcci&oacute;n" class="bold" />
+                    </div>
+                    <div class="ui-grid-col-8">
+<!--                        <p:message for="dirInput" />        -->
+                    </div>    
+                </div>
+
+                <div class="ui-grid-row" style="margin-bottom: 10px;">
+                    <div class="ui-grid-col-12">
+                        <p:inputText id="dirInput" value="#{checkoutViewMB.direccionStr}" 
+                                     required="true"
+                                     placeholder="Calle Segovia, nº 98"
+                                     style="width: 100%;" >
+                            <pe:keyFilter regEx="/[a-z áéíóúüñ,-/º0-9]/i"/>
+                        </p:inputText>
+                    </div>
+                </div>
+
+                
+                <!-- TELEFONO (telefonoStr) -->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4" style="margin: 3px 5px;">
+                        <p:outputLabel for="tlfInput" value="Tel&eacute;fono" class="bold" />
+                    </div>
+                    <div class="ui-grid-col-8">
+<!--                        <p:message for="tlfInput" />-->
+                    </div>    
+                </div>
+
+                <div class="ui-grid-row" style="margin-bottom: 10px;">
+                    <div class="ui-grid-col-12">
+                        <p:inputText id="tlfInput" value="#{checkoutViewMB.telefonoStr}" 
+                                     required="true"
+                                     placeholder="675109281" 
+                                     style="width: 100%;">
+                            <f:validateLength minimum="9" maximum="9"/>
+                            <f:validateRegex pattern="^[6789]{1}[0-9]{8}$" for="tlfInput" />
+                            <pe:keyFilter mask="pint"/>
+                        </p:inputText>                                                        
+                    </div>
+                </div>
+
+                
+                <!-- CODIDOPOSTAL (codigoPostal) -->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4" style="margin: 3px 5px;">
+                        <p:outputLabel for="cpInput" value="C&oacute;digo Postal" class="bold" />
+                    </div>
+                    <div class="ui-grid-col-8">
+<!--                        <p:message for="cpInput" />-->
+                    </div>    
+                </div>
+
+                <div class="ui-grid-row" style="margin-bottom: 10px;">
+                    <div class="ui-grid-col-12">
+                        <p:inputText id="cpInput" value="#{checkoutViewMB.codigoPostal}"
+                                    required="true" 
+                                    placeholder="06800"
+                                    style="width: 100%;">
+                            <p:ajax event="change" process="@this" update="cpInput, ciudadInput, provInput" listener="#{checkoutViewMB.buscarCP}" />                            
+                            <pe:keyFilter regEx="/[0-9]/"/>
+                        </p:inputText>
+                    </div>
+                </div>
+
+                
+                <!-- puebloStr -->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4" style="margin: 3px 5px;">
+                        <p:outputLabel for="ciudadInput" value="Ciudad (solo lectura)" class="bold" />
+                    </div>
+                    <div class="ui-grid-col-8">
+<!--                        <p:message for="ciudadInput"/>-->
+                    </div>    
+                </div>
+
+                <div class="ui-grid-row" style="margin-bottom: 10px;">
+                    <div class="ui-grid-col-12">
+                        <p:inputText id="ciudadInput" value="#{checkoutViewMB.puebloStr}" readonly="true"
+                                     required="true"
+                                     placeholder="M&eacute;rida" 
+                                     style="width: 100%;"/>
+                    </div>  
+                </div>
+
+                
+                <!-- provinciaStr -->
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-5" style="margin: 3px 5px;">
+                        <p:outputLabel for="provInput" value="Provincia (solo lectura)" class="bold" />
+                    </div>
+                    <div class="ui-grid-col-7">
+<!--                        <p:message for="provInput" />-->
+                    </div>    
+                </div>
+
+                <div class="ui-grid-row" style="margin-bottom: 20px;">
+                    <div class="ui-grid-col-12">
+                        <p:inputText id="provInput" value="#{checkoutViewMB.provinciaStr}" readonly="true"
+                                     required="true"
+                                     placeholder="Badajoz" 
+                                     style="width: 100%;">                            
+                        </p:inputText>                    
+                    </div>
+                </div>
+                
+                <!-- BOTONES -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+
+                    <p:commandButton value="Restablecer" icon="fa fa-ban"  disabled="true"
+                                     process="@this" update="addDirForm" actionListener="#{checkoutViewMB.resetDir}"                                     
+                                     class="ui-grid-col-5"/>                    
+
+                    <p:commandButton value="#{mensajes.comunEnviar}" icon="fa fa-chevron-circle-right" iconPos="right"                                      
+                                     process="@form" update="@form, elegirDir" actionListener="#{checkoutViewMB.addDir}" 
+                                     class="ui-grid-col-5"/>
+                </div>        
+
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12" style="display: flex; justify-content: center; align-items: center;">
+                        <h:outputText value="#{mensajes.comunDlgObl}"/>
+                    </div>
+                </div>     
+                
+            </h:form>                                        
+                
+    </ui:composition>
+</h:body>
+</html>

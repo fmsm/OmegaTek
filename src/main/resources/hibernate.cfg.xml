@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.datasource">java:comp/env/jdbc/jndi-pool</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.connection.autocommit">false</property>
+    <property name="hibernate.enable_lazy_load_no_trans">true</property>
+    <mapping class="es.albarregas.modelo.Caracteristica"/>
+    <mapping class="es.albarregas.modelo.Caracyprod"/>
+    <mapping class="es.albarregas.modelo.Categoria"/>
+    <mapping class="es.albarregas.modelo.Cliente"/>
+    <mapping class="es.albarregas.modelo.Configuracion"/>
+    <mapping class="es.albarregas.modelo.Confyprod"/>
+    <mapping class="es.albarregas.modelo.Direccion"/>
+    <mapping class="es.albarregas.modelo.EstadosPedido"/>
+    <mapping class="es.albarregas.modelo.Factura"/>
+    <mapping class="es.albarregas.modelo.Imagen"/>
+    <mapping class="es.albarregas.modelo.LineasPedido"/>
+    <mapping class="es.albarregas.modelo.Marca"/>
+    <mapping class="es.albarregas.modelo.Mensaje"/>
+    <mapping class="es.albarregas.modelo.Pedido"/>
+    <mapping class="es.albarregas.modelo.Producto"/>
+    <mapping class="es.albarregas.modelo.Proveedor"/>
+    <mapping class="es.albarregas.modelo.Provincia"/>
+    <mapping class="es.albarregas.modelo.Pueblo"/>
+    <mapping class="es.albarregas.modelo.TablaGeneral"/>
+    <mapping class="es.albarregas.modelo.Usuario"/>
+    <mapping resource="named-queries.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

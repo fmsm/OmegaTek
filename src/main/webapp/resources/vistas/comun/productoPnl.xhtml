@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        
+        <p:panel styleClass="ui-panelgrid-blank">
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12" 
+                     style="display: flex; justify-content: space-around; margin-bottom: 10px;">
+
+                    <p:graphicImage library="imagenes/productos" name="#{item.imagenes.get(0).imagen}" 
+                                    width="200px" height="200px" styleClass="falsoMarco"/>                                    
+                </div>
+            </div>
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12"
+                     style="text-align: center; margin-bottom: 10px;">
+
+                    <h:outputText id="nomProd" value="#{item.denominacion}" converter="limitarCaracteres" />
+                    <p:tooltip id="tooltipNomProd" for="nomProd" value="#{item.denominacion}" showEffect="clip" /> 
+
+                </div>                            
+            </div>
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+
+                    <div style="display: flex; justify-content: space-around; align-items: center;">
+                        <h:outputFormat value="#{mensajes.precio}" 
+                                        style="font-size: 1.1em;">
+                            <f:param value="#{item.precioUnitario}"/>
+                        </h:outputFormat>
+
+                        <p:button outcome="producto?faces-redirect=true" value="#{mensajes.indexBtnDetalles}" icon="fa fa-info-circle">
+                            <f:param name="id" value="#{item.idProducto}" />
+                        </p:button>
+                    </div>                                
+
+                </div>                            
+            </div>
+        </p:panel>        
+        
+    </ui:composition>
+</h:body>
+</html>

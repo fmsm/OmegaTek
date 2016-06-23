@@ -1,0 +1,136 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        
+        <div class="ui-grid-row">
+            
+            <div class="ui-grid-col-2">
+                <h:form id="usrPnlMnu">
+                    <p:menu style="width: 95%">
+                        <p:submenu label="Mensajes">
+                            <p:menuitem value="Enviar" actionListener="#{userPnlViewMB.setOpcionSeleccionada(0)}" update="usrPnlDerecha"/>
+                            <p:menuitem value="Recibidos" actionListener="#{userPnlViewMB.cargarMensajes(false)}" update="usrPnlDerecha"/>
+                            <p:menuitem value="Enviados" actionListener="#{userPnlViewMB.cargarMensajes(true)}" update="usrPnlDerecha"/>
+                        </p:submenu>
+                        <p:submenu label="Pedidos">
+                            <p:menuitem value="Listar" disabled="true"/>
+                        </p:submenu>
+                        <p:submenu label="Datos Personales">
+                            <p:menuitem value="Modificar" disabled="true" />
+                            <p:menuitem value="Favoritos" disabled="true" />
+                        </p:submenu>
+                    </p:menu>                
+                </h:form>
+            </div>
+            
+            
+            <div class="ui-grid-col-10">
+                
+                <p:panel id="usrPnlDerecha" styleClass="ui-panelgrid-blank">
+                
+                    <p:growl id="usrPnlMsgGrowl" />
+                        
+                    <!-- FORMULARIO PARA ENVIAR MENSAJES -->
+                    <h:form id="enviarMsgUsrForm" rendered="#{userPnlViewMB.opcionSeleccionada eq 0}">
+                        <p:panelGrid id="enviarMsgUsr" columns="2" styleClass="ui-panelgrid-blank">
+
+                            <p:outputLabel value="Destinatario " for="destinatario" />
+                            <p:inputText id="destinatario" value="#{userPnlViewMB.destinoMsgStr}" readonly="true" size="32"/>
+
+                            <p:outputLabel value="Asunto " for="asunto"/>
+                            <p:inputText id="asunto" value="#{userPnlViewMB.asunto}" size="32" required="true"/>
+
+                            <p:outputLabel value="Mensaje" for="mensaje"/>
+                            <p:inputTextarea id="mensaje" value="#{userPnlViewMB.mensajeStr}" rows="10" cols="30" maxlength="300" autoResize="false" required="true"
+                                             counter="display" counterTemplate="{0} caracteres restantes." />
+
+                            <h:outputText value=" "/>
+                            <h:outputText id="display" />
+
+                            <h:outputText value=" "/>
+                            <p:commandButton value="Enviar" actionListener="#{userPnlViewMB.enviarMsg}" process="@form" update="@form, usrPnlMsgGrowl"
+                                             style="width: 100%;"/>
+
+                        </p:panelGrid>
+                    </h:form>                    
+                             
+                    
+                    <!-- LISTA DE MENSAJES -->
+                    <h:form id="verMensajes" rendered="#{userPnlViewMB.opcionSeleccionada eq 1 or userPnlViewMB.opcionSeleccionada eq 2}" >
+                        
+                        <p:dataTable value="#{userPnlViewMB.mensajes}" var="msgR"  
+                                     rows="10" paginator="true" paginatorAlwaysVisible="false" 
+                                     resizableColumns="true" liveResize="true" reflow="true"
+                                     emptyMessage="No hay mensajes para este usuario" sortBy="#{msgR.fecha}" sortOrder="descending">
+
+                            <f:facet name="header">
+                                <h:outputText value="Mensajes Recibidos" rendered="#{userPnlViewMB.opcionSeleccionada eq 1}"/>
+                                <h:outputText value="Mensajes Enviados"  rendered="#{userPnlViewMB.opcionSeleccionada eq 2}"/>
+                            </f:facet>                            
+
+                            <p:column headerText="Origen">
+                                <h:outputText value="#{msgR.origen.email}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" />
+                                <h:outputText value="#{msgR.origen.email}" rendered="#{msgR.msgLeido}" />
+                            </p:column>
+
+                            <p:column headerText="Leido" class="centro">
+                                <h:outputText value="#{msgR.leido}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" />
+                                <h:outputText value="#{msgR.leido}" rendered="#{msgR.msgLeido}" />
+                            </p:column>                            
+
+                            <p:column headerText="Asunto">
+                                <h:outputText value="#{msgR.asunto}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" />
+                                <h:outputText value="#{msgR.asunto}" rendered="#{msgR.msgLeido}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{msgR.fecha}" style="font-weight: bold;" rendered="#{not msgR.msgLeido}" >
+                                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                                </h:outputText>
+                                <h:outputText value="#{msgR.fecha}" rendered="#{msgR.msgLeido}" >
+                                    <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                                </h:outputText>                                
+                            </p:column>                            
+
+                            <p:column headerText="Mensaje" class="centro">
+                                <p:commandButton value="Leer" icon="fa fa-envelope" 
+                                                 actionListener="#{userPnlViewMB.leerMensaje(msgR)}" update=":verMensajes:msgTxt" oncomplete="PF('msgDlg').show()"
+                                                 style="font-size: 0.8em;" />
+                            </p:column>
+
+                        </p:dataTable>                        
+                        
+                        
+                        <p:dialog header="Mensaje" widgetVar="msgDlg" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                            
+                            <p:outputPanel id="msgTxt" style="text-align:center;">                                
+                                <h:outputText value="#{userPnlViewMB.msgSeleccionado.mensaje}" />
+                            </p:outputPanel>
+                            
+                            <p:ajax event="close" update=":verMensajes"/>
+                        </p:dialog>                        
+                        
+                    </h:form>
+                    
+                </p:panel>
+                
+            </div>
+            
+        </div>
+        
+        <p:separator/>
+                
+    </ui:composition>
+</h:body>
+</html>

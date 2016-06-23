@@ -1,0 +1,97 @@
+
+<!--
+MEJORAS:
+- Que al llegar a esta view, no muestre ningun producto, si no un datagrid, (el mismo u otro) que muestre las diferentes categorias disponibles con una imagen y tal
+- Que no se traiga de la BD todo el objeto Producto, sino solo lo necesario: imagen, precio, id
+- Cambiar (si deja) named query "leerNumeroProductos" para que devuelva long y asi evitar tener que hacer casting en "CateViewMB.java", en el override
+  del método load
+- Resaltar/Visualizar de alguna forma la categoria seleccionada, de la que se están visualizando productos
+- Cambiar el tipo de menu a un "SelectCheckboxMenu", posible ejemplo de uso en "Primefaces CookBook" (pag.221) (quitar icon=fa fa-minus)
+- I18N para strings de esta pagina
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+                            
+        <div class="ui-grid-row">
+
+            <!-- LISTA DE CATEGORIAS -->
+
+            <div class="ui-grid-col-3">
+                <h:form>
+                    <p:menu>
+
+                        <p:submenu label="Todos">
+                            <p:menuitem value="&nbsp;Ver Todos" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(-1)}" update="@(.ui-datagrid)"/>
+                        </p:submenu>
+                                                
+                        <p:submenu label="Categorias">
+                            <p:menuitem value="&nbsp;Cajas" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(11)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Discos Duros Externos" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(8)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Discos Duros Internos" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(5)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Discos Duros SDD" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(6)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Fuentes Alimentación" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(12)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Memorias RAM" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(4)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Monitores" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(13)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Otros Perifericos" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(16)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Placas Base" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(2)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Portátiles" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(9)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Procesadores" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(1)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Ratones" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(15)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Tarjetas de Red" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(17)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Tarjetas gráficas" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(3)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Teclados" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(14)}" update="@(.ui-datagrid)"/>
+                            <p:menuitem value="&nbsp;Unidades Flash" icon="fa fa-minus" 
+                                        actionListener="#{cateViewMB.seleccionCategoria(7)}" update="@(.ui-datagrid)"/>
+                        </p:submenu>
+                                                            
+                    </p:menu>
+                </h:form>
+            </div>
+            
+            <!-- DATATGRID PRODUCTOS -->
+            
+            <div class="ui-grid-col-9">
+                
+                <p:dataGrid id="catDG" value="#{cateViewMB.model}" var="item" lazy="true" layout="grid" columns="3" rows="12" paginator="true">
+
+                    <ui:include src="/resources/vistas/comun/productoPnl.xhtml"/>
+                                                                
+                </p:dataGrid>
+                
+            </div>            
+            
+        </div>
+        
+        <p:separator/>
+                
+    </ui:composition>
+</h:body>
+</html>

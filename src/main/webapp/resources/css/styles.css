@@ -1,0 +1,115 @@
+
+/*centrar las secciones (NO NECESARIO AL USAR GRID CSS DE PF)*/
+/*header, nav, main { margin:auto; }*/
+
+/*BORDES MIENTRAS SE DISEÑA LA IMAGEN PARA AYUDAR EN EL DISEÑO*/
+/*header, header div {
+    border: 1px dotted lightgray;
+}*/
+
+/*BORDES MIENTRAS SE DISEÑA LA IMAGEN PARA AYUDAR EN EL DISEÑO*/
+footer{
+    border: 1px dotted lightgray;
+    background-color: white;
+}
+
+/*.bg-Blanco {
+    background: white !important;
+}*/
+
+/* "To change the style of a particular component instead of all components of same type use namespacing, 
+   example below demonstrates how to change header of all panels. (pag.554 - primefaces user guide 5.3.pdf) */
+/*.customPanel .ui-panel-content {
+    padding: 0 !important;
+}*/
+
+body { background-color: whitesmoke; }
+
+.derecha { text-align: right; }
+.izquierda { text-align: left; }
+.centro { text-align: center; }
+
+.centroVertical { display: flex; align-items: center; }
+
+.derechaHoriz { justify-content: flex-end;}
+.izquierdaHoriz { justify-content: flex-start;}
+.centroHoriz { justify-content: center;}
+
+.sinBorde { border: none !important; }
+
+.falsoMarco {
+    padding: 5px;
+    background-color: whitesmoke;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px gainsboro;    
+}
+
+.contProdCesta {
+    position: absolute;
+    z-index: 1;
+    top: 27%;
+    left: 47%;
+/*    background-color: lavender;*/
+/*    background-color: #FFF0A3;*/
+    background-color: white;
+    border-radius: 10px;
+    width: 1.7em;
+}
+
+.numProdCesta {
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    color: #B54926;
+}
+
+
+/*A PARTIR DE AQUI, ESTAN LOS ESTILOS QUE SOBREESCRIBEN LOS ESTILOS POR DEFECTO DE PRIMEFACES*/
+/*.ui-galleria, .ui-galleria-panel-wrapper, .ui-galleria-panel, ui-galleria-filmstrip-wrapper, .ui-galleria-filmstrip {
+    width: 100% !important;
+}*/
+/*.galleria-custom .ui-galleria, 
+.galleria-custom .ui-galleria-panel-wrapper, 
+.galleria-custom .ui-galleria-panel,
+.galleria-custom .ui-galleria-filmstrip-wrapper,
+.galleria-custom .ui-galleria-filmstrip {
+    width: 100% !important;
+}*/
+
+.ui-datalist-empty-message {
+    text-align: center !important;
+    font-size: 2em !important;
+    padding: 20px !important;
+}
+
+.ui-steps .ui-steps-item {
+    width: 25%;
+}
+ 
+.ui-state-highlight {
+    text-shadow: none !important;
+}
+ 
+.ui-steps.custom {
+    margin-bottom: 30px;
+}
+ 
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+    height: 10px;
+    padding: 0 1em;
+}
+ 
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+    background-color: #0081c2;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 30px;
+    border-radius: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.carousel-sinHeader .ui-carousel-header {
+    display: none;
+}

@@ -1,0 +1,62 @@
+
+<!--
+MEJORAS:
+- Añadir la categoria o/y una miniimagen del producto, al listado de resultados
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+                            
+<!--    <div class="ui-grid-row">-->
+        
+        <p:panel rendered="#{resultadosViewMB.numTotalResultados == 0}">
+            <div class="centroVertical centroHoriz">
+                <h:outputText value="No se encontraron resultados." 
+                              style="padding: 3em; font-size: 3em;"/>                    
+            </div>
+        </p:panel>
+
+        <!-- para iterar sobre un map (en vez de un list) en jsf/primefaces se puede hacer asi: http://stackoverflow.com/questions/20326148/display-key-and-value-map-in-primefaces-datatable/20331235#20331235 -->
+        <p:dataScroller value="#{resultadosViewMB.model}" var="item" chunkSize="25" lazy="true" rendered="#{resultadosViewMB.numTotalResultados != 0}">
+            <f:facet name="header">
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <h:outputText value="Resultados de la busqueda... (#{resultadosViewMB.numTotalResultados} resultados)" 
+                                      rendered="#{resultadosViewMB.numTotalResultados == 1}" />
+                        <h:outputText value="Resultado de la busqueda... (#{resultadosViewMB.numTotalResultados} resultado)" 
+                                      rendered="#{resultadosViewMB.numTotalResultados gt 1}" />                
+                    </div>
+                    <h:outputText value="(Desplazate hacia abajo para cargar m&aacute;s resultados)" rendered="#{resultadosViewMB.numTotalResultados gt 1}" />
+                </div>
+            </f:facet>
+
+            <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-9, ui-grid-col-3 derecha">
+
+                <h:outputText value="#{item.denominacion}"/>
+
+                <p:button outcome="producto?faces-redirect=true" value="#{mensajes.indexBtnDetalles}" icon="fa fa-info-circle">
+                    <f:param name="id" value="#{item.idProducto}" />
+                </p:button>                    
+
+            </p:panelGrid>
+
+        </p:dataScroller>
+            
+<!--    </div>-->
+        
+        <p:separator/>
+                
+    </ui:composition>
+</h:body>
+</html>

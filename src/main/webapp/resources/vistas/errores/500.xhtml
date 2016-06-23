@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <h:head>
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        <title><ui:insert name="tituloVentana">Error 500</ui:insert></title>
+        <h:outputStylesheet library="css" name="styles.css" />        
+    </h:head>        
+    
+    <h:body>
+        
+        <div class="centro">
+            <h:graphicImage library="imagenes" name="network-error.png"
+                            style="margin-top: 2em;"/>
+            <br/>
+            <p:panel styleClass="ui-panelgrid-blank sinBorde">
+                <h:outputText value="Error 500" style="font-size: 2em; font-weight: bold; margin-top: 2em;"/> <br/>
+                <h:outputText value="Informaremos a nuestros técnicos del error." style="font-variant: small-caps; margin-bottom: 2em;"/> <br/>
+                <p:button value="Volver a Inicio" outcome="/index?faces-redirect=true" 
+                          style="margin-top: 2em;"/>        
+            </p:panel>
+        </div>
+        
+    </h:body>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    
+    <!-- JSF quita del .html todos los comentarios, y de paso evita problemas con algunos componentes de jsf y primefaces -->
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>        
+    <!--
+    <context-param>
+      <description>State saving method: 'client' or 'server' (default). See JSF Specification section 2.5.2</description>
+      <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+      <param-value>client</param-value>
+    </context-param>
+    -->
+    
+    <!-- Primefacess selector de tema y habilitar FontAwesome -->
+    <!-- intento de crear un theme propio para la pagina, pero no esta bien -->
+<!--    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>omegatek</param-value>
+    </context-param>-->
+
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+    
+    <!-- paginas de error para los errores 4004 y 500 -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/resources/vistas/errores/404.xhtml</location>
+    </error-page>            
+    
+    <error-page>
+        <error-code>500</error-code>
+        <location>/resources/vistas/errores/500.xhtml</location>
+    </error-page>
+             
+                                       
+    <!-- relacionado con FontAwesome -->        
+    <mime-mapping>
+        <extension>woff2</extension>
+        <mime-type>font/woff2</mime-type>
+    </mime-mapping>        
+</web-app>

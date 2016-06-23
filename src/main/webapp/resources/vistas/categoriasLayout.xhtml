@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:view locale="#{facesContext.externalContext.requestLocale}">
+<h:head>
+    
+    <!-- Define la codificaci&oacute;n de caracteres -->
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <!-- Define el autor del documento -->
+    <meta name="author" content="Francisco S&aacute;nchez" />
+    <!-- Define el programa con el que se ha generado el documento -->
+    <meta name="generator" content="NetBeans 8.1 - Maven 3" /> 
+    <!-- Define el copyright del documento -->
+    <meta name="copyright" content="OmetaTek" />
+    <!-- Define el comportamiento de los buscadores -->
+    <meta name="robots" content="index, follow" />
+    <!-- Define las palabras claves del contenido del documento -->
+    <meta name="keywords" content="Tiendas de inform&atica;tica, Tiendas Online de inform&aacute;tica, Ordenadores, Componentes " />
+    <!-- Define una breve descripci&oacute;n del sitio -->
+    <meta name="description" content="Tienda Online de Inform&aacute;tica con gran variedad de componentes y precios muy competitivos" />            
+    <title><ui:insert name="tituloVentana">OmegaTek</ui:insert></title>
+    <h:outputStylesheet library="css" name="styles.css" />        
+    
+</h:head>
+
+<h:body>
+    
+    <div class="ui-grid ui-grid-responsive">
+        <div class="ui-grid-row">
+            
+            <div class="ui-grid-col-1"></div>
+            
+            <div class="ui-grid-col-10">
+                
+                <!-- CABECERA -->                
+                <header>        
+                    <ui:insert name="cabecera">
+                        <ui:include src="/resources/vistas/comun/cabecera.xhtml"/>
+                    </ui:insert>        
+                </header>
+
+                <nav>
+                    <ui:insert name="nav">
+                        <ui:include src="/resources/vistas/comun/nav.xhtml"/>
+                    </ui:insert>        
+                </nav>
+
+                <!-- CONTENIDO -->
+                <main>        
+                    <ui:insert name="contenido">
+                        <ui:include src="/resources/vistas/categorias/contenidoCat.xhtml"/>
+                    </ui:insert>                
+                </main>
+
+                <!-- FOOTER -->
+                <footer>
+                    <ui:insert name="footer">
+                        <ui:include src="/resources/vistas/comun/footer.xhtml"/>
+                    </ui:insert>
+
+<!--                    <ui:include src="/resources/vistas/comun/pruebas.xhtml"/>-->
+                </footer>
+            
+            </div>
+        
+            <div class="ui-grid-col-1"></div>
+        </div>
+    </div>
+    
+</h:body>
+</f:view>
+</html>
+
